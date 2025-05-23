@@ -1,0 +1,47 @@
+# Symfony
+/bin/.phpunit/
+/public/bundles/
+/var/
+/vendor/
+
+# Composer
+/composer.phar
+
+# Environments
+.env.local
+.env.local.php
+.env.*.php
+.env.test.local
+
+# Logs
+*.log
+
+# Cache
+*.cache
+
+# IDEs and other tools
+.idea/
+.vscode/
+.phpstorm.meta.php
+.env.test
+.phpunit.result.cache
+.php_cs.cache
+.phpstan.cache
+/node_modules/
+/web/js/*.js.map
+/web/css/*.css.map
+.DS_Store
+Thumbs.db
+.vagrant/
+.symfony/
+.ddev/
+
+# Custom for this project (based on your setup)
+# If you create a database file locally, add it here
+# /database.sqlite
+
+# If you use a specific local config file
+# /config/services.local.yaml
+
+# If you have specific local uploads
+# /public/uploads/
