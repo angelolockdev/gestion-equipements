@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/equipment')]
+#[Route('/equipments')]
 class EquipmentController extends AbstractController
 {
     #[Route('/', name: 'app_equipment_index', methods: ['GET'])]

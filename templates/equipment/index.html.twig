@@ -84,7 +84,7 @@
                     </td>
                     <td>
                         <a href="{{ path('app_equipment_show', {'id': equipment.id}) }}" class="btn btn-sm btn-info">Voir</a>
-                        {% if !equipment.deletedAt %}
+                        {% if equipment.deletedAt is empty %}
                             <a href="{{ path('app_equipment_edit', {'id': equipment.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
                             {# Formulaire pour la suppression (soft delete) #}
                             <form method="post" action="{{ path('app_equipment_delete', {'id': equipment.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet équipement ?');" style="display:inline-block;">
