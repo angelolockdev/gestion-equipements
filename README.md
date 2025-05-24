@@ -54,23 +54,35 @@ Ce projet est une implémentation des fonctionnalités demandées pour le test t
 4.  **Créez la base de données et exécutez les migrations Doctrine** :
     ```bash
     php bin/console doctrine:database:create
+    php bin/console doctrine:database:create --env=test
+
     php bin/console make:migration
-    php bin/console doctrine:migrations:migrate
+
+    php bin/console doctrine:migrations:migrate --no-interaction
+    php bin/console doctrine:migrations:migrate --env=test --no-interaction
     ```
-    *Note : `make:migration` générera un fichier de migration basé sur vos entités. Vous devrez l'exécuter avec `doctrine:migrations:migrate`.*
-5.  **Installez le package `symfony/uid` pour les UUID** :
+    ### Chargement des Fixtures de données
+    Le projet inclut des fixtures pour peupler la base de données avec des données de démonstration (employés et équipements).
     ```bash
-    composer require symfony/uid
+    php bin/console doctrine:fixtures:load
     ```
 
-## Lancement de l'application
+    *Note : `make:migration` générera un fichier de migration basé sur vos entités. Vous devrez l'exécuter avec `doctrine:migrations:migrate`.*
+5.  **Lancement de l'application**
 
-Démarrez le serveur web Symfony :
+Vous pouvez démarrer le serveur web local de Symfony :
 ```bash
 symfony serve
 ```
 L'application sera accessible à l'adresse indiquée dans votre terminal (généralement `https://127.0.0.1:8000`).
 
+6.  **Exécution des Tests**
+Pour lancer la suite de tests unitaires et fonctionnels :
+```bash
+php bin/phpunit
+# Ou pour plus de détails en cas d'erreur
+php bin/phpunit -v
+```
 ## Utilisation de l'API REST
 
 L'API est accessible via le préfixe `/api`.
