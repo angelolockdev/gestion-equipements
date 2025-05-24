@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de l'équipement{% endblock %}
+
+{% block body %}
+    <h1>Détail de l'équipement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td>{{ equipment.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ equipment.name }}</td>
+            </tr>
+            <tr>
+                <th>Catégorie</th>
+                <td>{{ equipment.category }}</td>
+            </tr>
+            <tr>
+                <th>Numéro de série</th>
+                <td>{{ equipment.number }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ equipment.description }}</td>
+            </tr>
+            <tr>
+                <th>Employé</th>
+                <td>
+                    {% if equipment.employee %}
+                        <a href="{{ path('app_employee_show', {'id': equipment.employee.id}) }}">
+                            {{ equipment.employee.firstName }} {{ equipment.employee.lastName }}
+                        </a>
+                    {% else %}
+                        Non assigné
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Date de création</th>
+                <td>{{ equipment.createdAt ? equipment.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Dernière mise à jour</th>
+                <td>{{ equipment.updatedAt ? equipment.updatedAt|date('Y-m-d H:i:s') : 'N/A' }}</td>
+            </tr>
+            <tr>
+                <th>Supprimé le</th>
+                <td>{{ equipment.deletedAt ? equipment.deletedAt|date('Y-m-d H:i:s') : 'Non supprimé' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_equipment_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('app_equipment_edit', {'id': equipment.id}) }}" class="btn btn-warning">Modifier</a>
+
+    <form method="post" action="{{ path('app_equipment_delete', {'id': equipment.id}) }}" style="display:inline-block;">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipment.id) }}">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet équipement ?');">Supprimer</button>
+    </form>
+{% endblock %}

@@ -158,7 +158,7 @@ class Equipment
 
     public function isDeleted(): bool
     {
-        return $this->deletedAt !== null;
+        return null !== $this->deletedAt;
     }
 
     public function softDelete(): void

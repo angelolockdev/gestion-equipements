@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.number) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.employee) }}
+
+    <button class="btn btn-success">{{ button_label|default('Sauvegarder') }}</button>
+{{ form_end(form) }}
