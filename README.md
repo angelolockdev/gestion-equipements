@@ -203,3 +203,8 @@ L'API est accessible via le préfixe `/api`.
     ```
     Exécutez les tests : `php bin/phpunit`
     Pour la couverture de code (nécessite Xdebug ou PCOV) : `php bin/phpunit --coverage-html var/coverage`
+
+### Structure des tests
+
+* **`tests/Unit/`**: Contient les tests pour la logique métier des entités (`EquipmentTest.php`, `EmployeeTest.php`).
+* **`tests/Functional/`**: Contient les tests d'intégration et fonctionnels pour les contrôleurs (`EquipmentControllerTest.php`, `EmployeeControllerTest.php`, `ApiControllerTest.php`). Ces tests démarrent le noyau Symfony et interagissent avec la base de données.

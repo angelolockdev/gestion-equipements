@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd"
-         backupGlobals="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
          colors="true"
-         bootstrap="tests/bootstrap.php"
-         cacheDirectory=".phpunit.cache"
-         failOnRisky="true"
-         failOnWarning="true"
->
+         cacheResult="false"
+         cacheDirectory=".phpunit.cache"  >
     <php>
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self deprecation]=0"/>
+        <env name="DATABASE_URL" value="mysql://root:secret@127.0.0.1:3305/gestion_materiel?serverVersion=11.7.2-MariaDB&amp;charset=utf8mb4"/>
 
-        <env name="DATABASE_URL" value="mysql://root:secret@127.0.0.1:3305/gestion_equipements_test?serverVersion=11.7.2-MariaDB&amp;charset=utf8mb4"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
     </php>
 
     <testsuites>

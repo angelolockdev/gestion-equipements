@@ -130,4 +130,12 @@ class EquipmentRepository extends ServiceEntityRepository
 
         return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
+
+    public function findAvailableEquipments(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.deletedAt IS NULL') // Important : exclure les éléments supprimés
+            ->getQuery()
+            ->getResult();
+    }
 }
