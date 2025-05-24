@@ -84,13 +84,7 @@
                     </td>
                     <td>
                         <a href="{{ path('app_equipment_show', {'id': equipment.id}) }}" class="btn btn-sm btn-info">Voir</a>
-                        {% if equipment.deletedAt %}
-                            {# Formulaire pour la restauration #}
-                            <form method="post" action="{{ path('app_equipment_restore', {'id': equipment.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir restaurer cet équipement ?');" style="display:inline-block;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('restore' ~ equipment.id) }}">
-                                <button type="submit" class="btn btn-sm btn-success">Restaurer</button>
-                            </form>
-                        {% else %}
+                        {% if !equipment.deletedAt %}
                             <a href="{{ path('app_equipment_edit', {'id': equipment.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
                             {# Formulaire pour la suppression (soft delete) #}
                             <form method="post" action="{{ path('app_equipment_delete', {'id': equipment.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet équipement ?');" style="display:inline-block;">

@@ -24,7 +24,6 @@ class EquipmentRepository extends ServiceEntityRepository
 
     /**
      * Retourne une liste de toutes les catégories uniques d'équipements non supprimés.
-     * @return array
      */
     public function findUniqueCategories(): array
     {

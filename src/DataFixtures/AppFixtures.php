@@ -12,7 +12,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-
         $categories = [
             'Ordinateur',
             'Moniteur',
@@ -23,26 +22,26 @@ class AppFixtures extends Fixture
             'Projecteur',
             'Tablette',
         ];
-        
+
         // Créer 5 employés
         $employees = [];
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $employee = new Employee();
-            $employee->setFirstName('Employe' . $i);
-            $employee->setLastName('Nom' . $i);
-            $employee->setEmail('employe' . $i . '@example.com');
+            $employee->setFirstName('Employe'.$i);
+            $employee->setLastName('Nom'.$i);
+            $employee->setEmail('employe'.$i.'@example.com');
             $employee->setHiredAt(new \DateTimeImmutable(sprintf('-%d years', $i + 1)));
             $manager->persist($employee);
             $employees[] = $employee;
         }
 
         // Créer 10 équipements
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $equipment = new Equipment();
-            $equipment->setName('Article ' . $i);
-            $equipment->setCategory($i % 2 === 0 ? 'Ordinateur' : 'Téléphone');
-            $equipment->setNumber('SN-' . Uuid::v4()->toRfc4122());
-            $equipment->setDescription('Description de l\'article ' . $i);
+            $equipment->setName('Article '.$i);
+            $equipment->setCategory(0 === $i % 2 ? 'Ordinateur' : 'Téléphone');
+            $equipment->setNumber('SN-'.Uuid::v4()->toRfc4122());
+            $equipment->setDescription('Description de l\'article '.$i);
             $equipment->setCreatedAt(new \DateTimeImmutable());
 
             if ($i < 5) {

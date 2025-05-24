@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Equipment;
-use App\Form\EquipmentType;
 use App\Form\EquipmentFilterType;
+use App\Form\EquipmentType;
 use App\Repository\EmployeeRepository;
 use App\Repository\EquipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/equipment')]
 class EquipmentController extends AbstractController
@@ -72,7 +72,7 @@ class EquipmentController extends AbstractController
                 $equipment->setCreatedAt(new \DateTimeImmutable());
             }
             $equipment->setUpdatedAt(new \DateTimeImmutable());
-    
+
             $entityManager->persist($equipment);
             $entityManager->flush();
 
@@ -103,11 +103,10 @@ class EquipmentController extends AbstractController
     {
         $form = $this->createForm(EquipmentType::class, $equipment);
         $form->handleRequest($request);
-        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $equipment->setUpdatedAt(new \DateTimeImmutable());
-    
+
             $entityManager->flush();
 
             $this->addFlash('success', 'L\'équipement a été mis à jour avec succès.');
@@ -132,20 +131,6 @@ class EquipmentController extends AbstractController
             $equipment->softDelete(); // Soft delete
             $entityManager->flush();
             $this->addFlash('success', 'L\'équipement a été supprimé (soft delete) avec succès.');
-        } else {
-            $this->addFlash('error', 'Token CSRF invalide.');
-        }
-
-        return $this->redirectToRoute('app_equipment_index');
-    }
-
-    #[Route('/{id}/restore', name: 'app_equipment_restore', methods: ['POST'])]
-    public function restore(Request $request, Equipment $equipment, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('restore'.$equipment->getId(), $request->request->get('_token'))) {
-            $equipment->restore(); // Restore
-            $entityManager->flush();
-            $this->addFlash('success', 'L\'équipement a été restauré avec succès.');
         } else {
             $this->addFlash('error', 'Token CSRF invalide.');
         }

@@ -34,7 +34,7 @@ class EquipmentType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'required' => false,
-                'empty_data' => '', // Assure que la valeur par défaut est une chaîne vide
+                'empty_data' => '',
                 'attr' => ['placeholder' => 'Détails supplémentaires sur l\'équipement...'],
             ])
             ->add('employee', EntityType::class, [

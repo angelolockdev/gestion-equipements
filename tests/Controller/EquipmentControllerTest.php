@@ -2,13 +2,12 @@
 
 namespace App\Tests\Functional\Controller;
 
+use App\DataFixtures\AppFixtures;
 use App\Entity\Employee;
 use App\Entity\Equipment;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use App\DataFixtures\AppFixtures;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EquipmentControllerTest extends WebTestCase
 {
@@ -73,7 +72,7 @@ class EquipmentControllerTest extends WebTestCase
         $this->entityManager->flush();
         $equipmentId = $equipment->getId();
 
-        $crawler = $this->client->request('GET', '/equipments/' . $equipmentId . '/edit');
+        $crawler = $this->client->request('GET', '/equipments/'.$equipmentId.'/edit');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Modifier l\'équipement');
@@ -93,5 +92,4 @@ class EquipmentControllerTest extends WebTestCase
         $this->assertEquals('New Name', $updatedEquipment->getName());
         $this->assertEquals('NEW-SN-456', $updatedEquipment->getNumber());
     }
-
 }

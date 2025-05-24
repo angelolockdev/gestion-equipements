@@ -5,7 +5,6 @@ namespace App\Tests\Unit\Entity;
 use App\Entity\Equipment;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class EquipmentTest extends TestCase
 {
