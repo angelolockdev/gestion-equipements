@@ -17,16 +17,16 @@ class EmployeeType extends AbstractType
         $builder
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
-                'attr' => ['placeholder' => 'Ex: Jean']
+                'attr' => ['placeholder' => 'Ex: Jean'],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom de famille',
-                'attr' => ['placeholder' => 'Ex: Dupont']
+                'attr' => ['placeholder' => 'Ex: Dupont'],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'help' => 'Doit être unique et au format email.',
-                'attr' => ['placeholder' => 'Ex: jean.dupont@manatime.com']
+                'attr' => ['placeholder' => 'Ex: jean.dupont@manatime.com'],
             ])
             ->add('hiredAt', DateType::class, [
                 'label' => 'Date d\'embauche',
