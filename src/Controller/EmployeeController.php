@@ -76,7 +76,7 @@ class EmployeeController extends AbstractController
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
         foreach ($employee->getEquipment() as $equipment) {
-            $equipment->setEmployee(null);
+            $equipment->setEmployee(null); //Dé-assignée l'employée de l'equipement
         }
 
         $entityManager->remove($employee);

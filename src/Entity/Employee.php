@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\EmployeeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EmployeeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé.')]
@@ -18,24 +19,29 @@ class Employee
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['equipment:read', 'equipment:write'])] 
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le prénom est obligatoire.')]
+    #[Groups(['equipment:read'])] 
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Le nom de famille est obligatoire.')]
+    #[Groups(['equipment:read'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank(message: 'L\'email est obligatoire.')]
     #[Assert\Email(message: 'Le format de l\'email est invalide.')]
+    #[Groups(['equipment:read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotBlank(message: 'La date d\'embauche est obligatoire.')]
     #[Assert\LessThanOrEqual('today', message: 'La date d\'embauche ne peut pas être dans le futur.')]
+    #[Groups(['equipment:read'])]
     private ?\DateTimeImmutable $hiredAt = null;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Equipment::class)]

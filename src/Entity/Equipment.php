@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\EquipmentRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\EquipmentRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: EquipmentRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -17,31 +18,40 @@ class Equipment
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['equipment:read', 'equipment:write'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['equipment:read', 'equipment:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['equipment:read', 'equipment:write'])]
     private ?string $category = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank(message: 'Le numéro d\'équipement est obligatoire.')]
+    #[Groups(['equipment:read', 'equipment:write'])]
     private ?string $number = null;
 
     #[ORM\Column(type: 'text', nullable: false, options: ['default' => ''])]
+    #[Groups(['equipment:read', 'equipment:write'])]
     private ?string $description = '';
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['equipment:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['equipment:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['equipment:read'])]
     private ?\DateTimeImmutable $deletedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'equipment')]
+    #[Groups(['equipment:read', 'equipment:write'])]
     private ?Employee $employee = null;
 
     public function __construct()
