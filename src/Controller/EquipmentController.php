@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Equipment;
 use App\Form\EquipmentType;
+use App\Form\EquipmentFilterType;
 use App\Repository\EmployeeRepository;
 use App\Repository\EquipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/equipment')]
 class EquipmentController extends AbstractController
@@ -21,41 +22,57 @@ class EquipmentController extends AbstractController
         EquipmentRepository $equipmentRepository,
         EmployeeRepository $employeeRepository,
     ): Response {
-        $category = $request->query->get('category');
-        $employeeId = $request->query->get('employee');
-        $dateFrom = $request->query->get('dateFrom') ? new \DateTimeImmutable($request->query->get('dateFrom')) : null;
-        $dateTo = $request->query->get('dateTo') ? new \DateTimeImmutable($request->query->get('dateTo')) : null;
+        $filterForm = $this->createForm(EquipmentFilterType::class);
+        $filterForm->handleRequest($request);
 
-        $employee = null;
-        if ($employeeId) {
-            $employee = $employeeRepository->find($employeeId);
+        // Initialisation de la requête de base
+        $queryBuilder = $equipmentRepository->createQueryBuilder('e')
+            ->leftJoin('e.employee', 'emp')
+            ->addSelect('emp');
+
+        // Gestion du soft delete
+        $queryBuilder->andWhere('e.deletedAt IS NULL');
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            $data = $filterForm->getData();
+
+            if ($data['category']) {
+                $queryBuilder->andWhere('e.category = :category')
+                    ->setParameter('category', $data['category']);
+            }
+            if ($data['employee']) {
+                $queryBuilder->andWhere('e.employee = :employee')
+                    ->setParameter('employee', $data['employee']);
+            }
+            if ($data['startDate']) {
+                $queryBuilder->andWhere('e.createdAt >= :startDate')
+                    ->setParameter('startDate', $data['startDate']);
+            }
+            if ($data['endDate']) {
+                $queryBuilder->andWhere('e.createdAt <= :endDate')
+                    ->setParameter('endDate', $data['endDate']);
+            }
         }
 
-        $equipments = $equipmentRepository->findNonDeleted($category, $employee, $dateFrom, $dateTo);
-        $allEmployees = $employeeRepository->findAll(); // Pour le filtre par employé
-        $availableCategories = array_unique(array_map(fn ($e) => $e->getCategory(), $equipmentRepository->findAll())); // Pour le filtre par catégorie
-
         return $this->render('equipment/index.html.twig', [
-            'equipments' => $equipments,
-            'allEmployees' => $allEmployees,
-            'availableCategories' => array_filter($availableCategories), // Supprime les null
-            'filters' => [
-                'category' => $category,
-                'employee' => $employeeId,
-                'dateFrom' => $request->query->get('dateFrom'),
-                'dateTo' => $request->query->get('dateTo'),
-            ],
+            'equipments' => $queryBuilder->getQuery()->getResult(),
+            'filterForm' => $filterForm->createView(),
         ]);
     }
 
     #[Route('/new', name: 'app_equipment_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EmployeeRepository $employeeRepository): Response
     {
         $equipment = new Equipment();
         $form = $this->createForm(EquipmentType::class, $equipment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (!$equipment->getCreatedAt()) {
+                $equipment->setCreatedAt(new \DateTimeImmutable());
+            }
+            $equipment->setUpdatedAt(new \DateTimeImmutable());
+    
             $entityManager->persist($equipment);
             $entityManager->flush();
 
@@ -64,9 +81,12 @@ class EquipmentController extends AbstractController
             return $this->redirectToRoute('app_equipment_index');
         }
 
+        $employees = $employeeRepository->findAll();
+
         return $this->render('equipment/new.html.twig', [
             'equipment' => $equipment,
             'form' => $form,
+            'employees' => $employees,
         ]);
     }
 
@@ -79,12 +99,15 @@ class EquipmentController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_equipment_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Equipment $equipment, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Equipment $equipment, EntityManagerInterface $entityManager, EmployeeRepository $employeeRepository): Response
     {
         $form = $this->createForm(EquipmentType::class, $equipment);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $equipment->setUpdatedAt(new \DateTimeImmutable());
+    
             $entityManager->flush();
 
             $this->addFlash('success', 'L\'équipement a été mis à jour avec succès.');
@@ -92,9 +115,13 @@ class EquipmentController extends AbstractController
             return $this->redirectToRoute('app_equipment_index');
         }
 
+        // Passage de la liste des employés à la vue
+        $employees = $employeeRepository->findAll();
+
         return $this->render('equipment/edit.html.twig', [
             'equipment' => $equipment,
             'form' => $form,
+            'employees' => $employees,
         ]);
     }
 

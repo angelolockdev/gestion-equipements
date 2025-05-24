@@ -75,14 +75,10 @@ class EmployeeController extends AbstractController
     #[Route('/{id}/delete', name: 'app_employee_delete', methods: ['POST'])]
     public function delete(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
     {
-        // Note: La suppression d'un employé ne supprime pas ses équipements.
-        // Les équipements assignés à cet employé auront leur champ 'employee' mis à null.
-        // Si une suppression en cascade était souhaitée, il faudrait l'ajouter dans l'entité Employee.
-        // Pour ce test, nous laissons les équipements orphelins ou gérons la désassignation.
-        // Ici, nous désassignons tous les équipements avant de supprimer l'employé.
         foreach ($employee->getEquipment() as $equipment) {
             $equipment->setEmployee(null);
         }
+
         $entityManager->remove($employee);
         $entityManager->flush();
 

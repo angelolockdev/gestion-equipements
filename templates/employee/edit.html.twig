@@ -3,22 +3,9 @@
 {% block title %}Modifier l'employé{% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Modifier l'employé</h1>
+    <h1>Modifier l'employé</h1>
 
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        {{ form_start(form) }}
-        <div class="space-y-4">
-            {{ form_row(form.firstName) }}
-            {{ form_row(form.lastName) }}
-            {{ form_row(form.email) }}
-            {{ form_row(form.hiredAt) }}
-        </div>
-        <button type="submit" class="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Mettre à jour
-        </button>
-        <a href="{{ path('app_employee_index') }}" class="mt-6 ml-4 inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-            Annuler
-        </a>
-        {{ form_end(form) }}
-    </div>
+    {{ include('employee/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    <a href="{{ path('app_employee_index') }}" class="btn btn-secondary">Retour à la liste</a>
 {% endblock %}

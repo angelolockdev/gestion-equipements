@@ -1,0 +1,27 @@
+{{ form_start(form) }}
+    <div class="mb-3">
+        {{ form_label(form.firstName, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.firstName) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.lastName, 'Nom de famille', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.lastName) }}
+    </div>
+    <div class="mb-3">
+        {{ form_row(form.email, {
+            'label': 'Adresse E-mail',
+            'attr': {'class': 'form-control', 'placeholder': 'john.doe@example.com'}
+        }) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.hiredAt, 'Date d\'embauche', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.hiredAt, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.hiredAt) }}
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
+    </div>
+{{ form_end(form) }}

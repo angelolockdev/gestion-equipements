@@ -4,6 +4,8 @@
     {{ form_row(form.number) }}
     {{ form_row(form.description) }}
     {{ form_row(form.employee) }}
-
-    <button class="btn btn-success">{{ button_label|default('Sauvegarder') }}</button>
+    
+    <div class="mb-3">
+        <button class="btn btn-success mt-3">{{ button_label|default('Sauvegarder') }}</button>
+    </div>
 {{ form_end(form) }}

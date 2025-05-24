@@ -23,6 +23,21 @@ class EquipmentRepository extends ServiceEntityRepository
     }
 
     /**
+     * Retourne une liste de toutes les catégories uniques d'équipements non supprimés.
+     * @return array
+     */
+    public function findUniqueCategories(): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('DISTINCT e.category')
+            ->where('e.deletedAt IS NULL') // Exclure les équipements supprimés
+            ->andWhere('e.category IS NOT NULL') // Exclure les catégories nulles
+            ->orderBy('e.category', 'ASC');
+
+        return array_column($qb->getQuery()->getScalarResult(), 'category');
+    }
+
+    /**
      * Récupère tous les équipements non supprimés, avec des options de filtrage.
      *
      * @return Equipment[]

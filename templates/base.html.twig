@@ -4,35 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Gestion de Matériel{% endblock %}</title>
-    <link href="[https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css](https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css)" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22[http://www.w3.org/2000/svg%22](http://www.w3.org/2000/svg%22) viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚙️</text></svg>">
+
+    {# CSS de Bootstrap 5 via CDN #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    {# Votre CSS personnalisé (optionnel) - Si vous avez un fichier public/css/custom.css #}
+    {# <link rel="stylesheet" href="{{ asset('css/custom.css') }}"> #}
+
+    {% block stylesheets %}{% endblock %}
+
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
-    <nav class="bg-teal-600 p-4 text-white shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="{{ path('app_equipment_index') }}" class="text-2xl font-bold">Gestion de Matériel</a>
-            <div>
-                <a href="{{ path('app_equipment_index') }}" class="px-4 py-2 rounded hover:bg-teal-700">Équipements</a>
-                <a href="{{ path('app_employee_index') }}" class="px-4 py-2 rounded hover:bg-teal-700">Employés</a>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ path('app_equipment_index') }}">Gestion Matériel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto"> {# ms-auto aligne à droite #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_equipment_index') }}">Équipements</a> {# <-- ICI #}
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_employee_index') }}">Employés</a> {# <-- ET ICI #}
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto mt-8 p-4">
-        {% for message in app.flashes('success') %}
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Succès!</strong>
-                <span class="block sm:inline">{{ message }}</span>
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('error') %}
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Erreur!</strong>
-                <span class="block sm:inline">{{ message }}</span>
-            </div>
-        {% endfor %}
-
+    <main class="container"> {# La classe container de Bootstrap #}
+        {% include 'partials/_flash_messages.html.twig' %}
         {% block body %}{% endblock %}
-    </div>
+    </main>
+
+    {# JavaScript de Bootstrap 5 via CDN (doit être après le body) #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    {# <script src="{{ asset('js/custom.js') }}"></script> #}
+
+    {% block javascripts %}
+        {# Les scripts spécifiques à une page peuvent être ajoutés ici #}
+    {% endblock %}
 </body>
 </html>

@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de l'employé{% endblock %}
+
+{% block body %}
+    <h1>Détail de l'employé</h1>
+
+    <table class="table mb-4">
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td>{{ employee.id }}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
+                <td>{{ employee.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ employee.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ employee.email }}</td>
+            </tr>
+            <tr>
+                <th>Date d'embauche</th>
+                <td>{{ employee.hiredAt ? employee.hiredAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_employee_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    <a href="{{ path('app_employee_edit', {'id': employee.id}) }}" class="btn btn-warning">Modifier</a>
+    <form method="post" action="{{ path('app_employee_delete', {'id': employee.id}) }}" style="display:inline-block;">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employee.id) }}">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ? Cela ne désassociera PAS les équipements qui lui sont liés.');">Supprimer</button>
+    </form>
+
+    <h2 class="mt-5" id="equipments-section">Équipements assignés à {{ employee.firstName }} {{ employee.lastName }}</h2>
+
+    {% if employee.equipment is not empty %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Catégorie</th>
+                    <th>Numéro de série</th>
+                    <th>Statut</th> 
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipment in employee.equipment %}
+                    
+                    {% if equipment.deletedAt is null %}
+                        <tr>
+                            <td>{{ equipment.id }}</td>
+                            <td>{{ equipment.name }}</td>
+                            <td>{{ equipment.category }}</td>
+                            <td>{{ equipment.number }}</td>
+                            <td>Actif</td>
+                            <td>
+                                <a href="{{ path('app_equipment_show', {'id': equipment.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                                <a href="{{ path('app_equipment_edit', {'id': equipment.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr class="table-danger"> 
+                            <td>{{ equipment.id }}</td>
+                            <td>{{ equipment.name }}</td>
+                            <td>{{ equipment.category }}</td>
+                            <td>{{ equipment.number }}</td>
+                            <td>Supprimé le {{ equipment.deletedAt|date('Y-m-d') }}</td>
+                            <td>
+                                <a href="{{ path('app_equipment_show', {'id': equipment.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Cet employé n'a aucun équipement assigné.</p>
+    {% endif %}
+
+{% endblock %}
